@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>Слайдер</title>
+</head>
+
+<body>
+   
+    <div class="thumbnail-gallery">
+        <div class="thumbnail" onclick="openSlider('painting')">
+            <img src="img/живопись и тд/бе.jpg" alt="Живопись">
+            <p>Живопись и работа по шрифтам</p>
+        </div>
+        <div class="thumbnail" onclick="openSlider('colors')">
+            <img src="img/цветоведение/бе11 (4).jpg" alt="Машины">
+            <p>Цветовединие</p>
+        </div>
+        <div class="thumbnail" onclick="openSlider('proekt')">
+            <img src="img/проектная/бе11 (5).jpg" alt="Пейзажи">
+            <p>Проектная графика</p>
+        </div>
+
+
+        <div class="thumbnail" onclick="openSlider('composition')">
+            <img src="img/композиция/бе11 (1).jpg" alt="Пейзажи">
+            <p>Композиция</p>
+        </div>
+        <div class="thumbnail" onclick="openSlider('academ')">
+            <img src="img/академ/бе2.jpg" alt="Пейзажи">
+            <p>Академический рисунок</p>
+        </div>
+        <div class="thumbnail" onclick="openSlider('sketch')">
+            <img src="img/скетчи/2.jpg" alt="Пейзажи">
+            <p>Скетчи</p>
+        </div>
+        <div class="thumbnail" onclick="openSlider('general')">
+            <img src="general/iaaa.jpg" alt="Общие">
+            <p>Общие</p>
+        </div>
+        <div class="thumbnail" onclick="openSlider('fun')">
+            <img src="general/Zorin.jpg" alt="Смешные">
+            <p>Смешные</p>
+        </div>
+    </div>
+
+    <div class="slider" id="slider">
+        <div class="slides" id="slides"></div>
+        <div class="controls">
+            <div class="control left" onclick="showPrevSlide()">&#10094;</div>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="control right" onclick="showNextSlide()">&#10095;</div>
+        </div>
+        <div class="close" onclick="closeSlider()">✖</div>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        let currentImages = []; // Массив для хранения текущих изображений
+        const slides = document.getElementById('slides');
+        const progress = document.getElementById('progress');
+
+        function init() {
+            alert("Хелоу май фриенд");
+            const userResponse = confirm("Хотите получить дополнительную информацию?");
+
+            if (userResponse) {
+                alert("Вы хотите увидеть фотографии Качуры?");
+
+                const questions = [
+                    "Подумайте еще раз. Вы действительно хотите их увидеть?",
+                    "Подумайте еще более точно",
+                    "Ещё лучше",
+                    "Оно тебе не надо, нажми на отмену",
+                    "Пожалеешь, я тебя уверяю",
+                    "Я предупреждал"
+                ];
+
+                for (let i = 0; i < questions.length; i++) {
+                    const currentResponse = confirm(questions[i]);
+                    if (!currentResponse) {
+                        alert("Тогда пошли нахуй, у вас нет выбора");
+                        return; // Завершить выполнение функции, не вызывая ошибки
+                    }
+                }
+
+                alert("Любуйся, приятного просмотра (:");
+            } else {
+                alert("Тогда пошли нахуй, у вас нет выбора");
+            }
+        }
+
+        function openSlider(category) {
+            currentIndex = 0; // Сброс индекса
+            currentImages = images[category]; // Получаем изображения для выбранной категории
+            slides.innerHTML = ''; // Очищаем предыдущие слайды
+            currentImages.forEach(src => {
+                const slideDiv = document.createElement('div');
+                slideDiv.classList.add('slide');
+                slideDiv.style.backgroundImage = `url('${src}')`;
+                slides.appendChild(slideDiv);
+            });
+            document.getElementById('slider').style.display = 'flex'; // Показываем слайдер
+            updateSlider(); // Обновляем слайдер
+        }
+
+        function closeSlider() {
+            document.getElementById('slider').style.display = 'none'; // Скрываем слайдер
+        }
+
+        function showNextSlide() {
+            currentIndex = (currentIndex + 1) % currentImages.length; // Изменяем индекс
+            updateSlider(); // Обновляем слайдер
+        }
+
+        function showPrevSlide() {
+            currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length; // Изменяем индекс
+            updateSlider(); // Обновляем слайдер
+        }
+
+        function updateSlider() {
+            slides.style.transform = 'translateX(' + (-currentIndex * 100) + '%)'; // Перемещение слайдов
+            updateProgress(); // Обновление прогресса
+        }
+
+        function updateProgress() {
+            const progressPercentage = ((currentIndex + 1) / currentImages.length) * 100; // Процент для прогресс-бара
+            progress.style.width = progressPercentage + '%'; // Обновляем ширину прогресс-бара
+        }
+
+        window.addEventListener('wheel', (event) => {
+            if (document.getElementById('slider').style.display === 'flex') {
+                if (event.deltaY > 0) {
+                    showNextSlide(); // Прокрутка вниз
+                } else {
+                    showPrevSlide(); // Прокрутка вверх
+                }
+            }
+        });
+
+        const images = {
+            painting: [
+                'img/живопись и тд/1.jpg',
+                'img/живопись и тд/2.jpg',
+                'img/живопись и тд/бе.jpg',
+                'img/живопись и тд/бе9.jpg',
+                'img/живопись и тд/бе10.jpg',
+            ],
+            colors: [
+                'img/цветоведение/бе3 (1).jpg',
+                'img/цветоведение/бе3 (3).jpg',
+                'img/цветоведение/бе3 (4).jpg',
+                'img/цветоведение/бе11 (4).jpg',
+            ],
+            proekt: [
+                'img/проектная/бе3 (5).jpg',
+                'img/проектная/бе3 (8).jpg',
+                'img/проектная/бе11 (5).jpg',
+            ],
+            composition: [
+                'img/композиция/бе3 (2).jpg',
+                'img/композиция/бе3 (6).jpg',
+                'img/композиция/бе3 (7).jpg',
+                'img/композиция/бе11 (1).jpg',
+                'img/композиция/бе11 (2).jpg',
+                'img/композиция/бе11 (3).jpg',
+            ],
+            academ: [
+                'img/академ/бе2.jpg',
+                'img/академ/пам.jpg',
+                'img/академ/пу.jpg',
+            ],
+            sketch: [
+                'img/скетчи/1.jpg',
+                'img/скетчи/2.jpg',
+            ],
+            general: [
+                'general/iaaa.jpg'
+            ],
+            fun: [
+                'general/Zorin.jpg',
+                'img/бе11 (6).jpg'
+            ]
+        };
+
+        // Вызываем функцию инициализации
+        init();
+    </script>
+</body>
+
+</html>
